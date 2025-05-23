@@ -17,12 +17,19 @@ def print_choices():
 def add_patient(patients_cache):
     print("\n======== DODAWANIE PACJENTA ========")
     name = input("Imię: ").strip().capitalize()
+    name2 = input("Drugie Imię (opcjonalne): ").strip().capitalize() or None
     surname = input("Nazwisko: ").strip().capitalize()
     pesel = input("Pesel: ").strip()
+    address = input("Adres: ").strip()
+    phone = input("Telefon: ").strip()
+
 
     data = {
         "name": name,
+        "name2":name2,
         "surname": surname,
+        "address": address,
+        "phone": phone,
         "visits": [],
         "prescriptions": [],
         "referrals": []
@@ -45,8 +52,12 @@ def patient_info(patients_cache):
         data = json.loads(json_data)
 
         print(f"\nImię: {data["name"]}")
+        if data["name2"] is not None:
+            print(f"Drugie imię: {data["name2"]}")
         print(f"Nazwisko: {data["surname"]}")
         print(f"Pesel: {pesel}")
+        print(f"Adres: {data["address"]}")
+        print(f"Telefon: {data["phone"]}")
 
         print("Wizyty:")
         for visit in data["visits"]:
@@ -149,8 +160,12 @@ def all_patients_info(patients_cache):
         if value is not None:
             data = json.loads(value)
             print(f"\nPESEL: {key}")
-            print(f"Imię: {data['name']}")
-            print(f"Nazwisko: {data['surname']}")
+            print(f"\nImię: {data["name"]}")
+            if data["name2"] is not None:
+                print(f"Drugie imię: {data["name2"]}")
+            print(f"Nazwisko: {data["surname"]}")
+            print(f"Adres: {data["address"]}")
+            print(f"Telefon: {data["phone"]}")
 
             print("Wizyty:")
             for visit in data["visits"]:
@@ -245,8 +260,13 @@ def main():
             break
 
         elif choice == "cl":
-            destroy_cache(patients_cache)
-            break
+            confirm = input("Na pewno usunąć cache? (tak/nie): ")
+            if confirm.lower() == 'tak':
+                patients_cache.destroy()
+                print("Cache zniszczony")
+            else:
+                print("Anulowano")
+                break
         else:
             print("\nBłąd: Niepoprawne polecenie")
 

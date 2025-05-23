@@ -4,15 +4,15 @@ import json
 
 def print_choices():
     print("\n======== OPERACJE ========")
-    print("dp - dodaj pacjenta")
     print("ip - informacje o pacjencie")
+    print("iw - informacje o wszystkich pacjentach")
+    print("dp - dodaj pacjenta")
     print("dw - dodaj wizytę")
     print("dr - dodaj receptę")
     print("ds - dodaj skierowanie")
-    print("all - informacje o wszystkich pacjentach")
     print("up - usuń pacjenta")
-    print("q - zakończ program")
-    print("cl - usuń cache")
+    print("q  - zakończ program")
+    print("uc - usuń cache")
 
 def add_patient(patients_cache):
     print("\n======== DODAWANIE PACJENTA ========")
@@ -243,7 +243,7 @@ def main():
         elif choice == "ds":
             add_referral(patients_cache)
 
-        elif choice == "all":
+        elif choice == "iw":
             all_patients_info(patients_cache)
         
         elif choice == "up":
@@ -253,7 +253,7 @@ def main():
             # patients_cache.destroy()
             break
 
-        elif choice == "cl":
+        elif choice == "uc":
             destroy_cache(patients_cache)
             break
         else:

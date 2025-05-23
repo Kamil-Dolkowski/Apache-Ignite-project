@@ -23,7 +23,6 @@ def add_patient(patients_cache):
     data = {
         "name": name,
         "surname": surname,
-        "pesel": pesel,
         "visits": [],
         "prescriptions": [],
         "referrals": []
@@ -47,7 +46,7 @@ def patient_info(patients_cache):
 
         print(f"\nImię: {data["name"]}")
         print(f"Nazwisko: {data["surname"]}")
-        print(f"Pesel: {data["pesel"]}")
+        print(f"Pesel: {pesel}")
 
         print("Wizyty:")
         for visit in data["visits"]:
@@ -202,7 +201,6 @@ def main():
     data = {
         "name": 'Piotr',
         "surname": 'Fulmański',
-        "pesel": '1',
         "visits": [
             {"timestamp": '12.04.2025 10:00', "doctor": 'Anna Nowak'},
             {"timestamp": '10.05.2025 9:00', "doctor": 'Anna Nowak'}

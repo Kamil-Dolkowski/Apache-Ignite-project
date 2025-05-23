@@ -7,6 +7,7 @@ def print_choices():
     print("dp - dodaj pacjenta")
     print("ip - informacje o pacjencie")
     print("dw - dodaj wizytę")
+    print("all - informacje o wszystkich pacjentach")
     print("q - zakończ program")
 
 def add_patient(patients_cache):
@@ -70,6 +71,19 @@ def add_visit(patients_cache):
     else:
         print("\nBrak takiego pacjenta")
 
+def all_patients_info(patients_cache):
+    print("\n======== INFO O WSZYSTKICH PACJENTACH ========")
+    for key, value in patients_cache.scan():
+        if value is not None:
+            data = json.loads(value)
+            print(f"\nPESEL: {key}")
+            print(f"Imię: {data['name']}")
+            print(f"Nazwisko: {data['surname']}")
+            print("Wizyty:")
+            for visit in data["visits"]:
+                print(f"- Data: {visit['timestamp']}, Lekarz: {visit['doctor']}")
+        else:
+            print(f"\nPESEL: {key} – Brak informacji")
 
 def main():
     try:
@@ -114,9 +128,7 @@ def main():
             add_visit(patients_cache)
 
         elif choice == "all":
-            result = patients_cache.scan()
-            for k, v in result:
-                print(k, v)
+            all_patients_info(patients_cache)
             
         elif choice == "q":
             # patients_cache.destroy()

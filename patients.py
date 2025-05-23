@@ -7,6 +7,8 @@ def print_choices():
     print("dp - dodaj pacjenta")
     print("ip - informacje o pacjencie")
     print("dw - dodaj wizytę")
+    print("dr - dodaj receptę")
+    print("ds - dodaj skierowanie")
     print("all - informacje o wszystkich pacjentach")
     print("q - zakończ program")
 
@@ -20,7 +22,9 @@ def add_patient(patients_cache):
         "name": name,
         "surname": surname,
         "pesel": pesel,
-        "visits": []
+        "visits": [],
+        "prescriptions": [],
+        "referrals": []
     }
 
     json_data = json.dumps(data)
@@ -42,6 +46,15 @@ def patient_info(patients_cache):
         print("Wizyty:")
         for visit in data["visits"]:
             print(f"- Data: {visit["timestamp"]}, Lekarz: {visit["doctor"]}")
+        
+        print("Recepty:")
+        for prescription in data["prescriptions"]:
+            print(f"- Data: {prescription["date"]}, Lekarz: {prescription["doctor"]}, Leki {prescription["medicines"]}")
+
+        print("Skierowania:")
+        for referral in data["referrals"]:
+            print(f"- Data: {referral["date"]}, Lekarz: {referral["doctor"]}, Badanie: {referral["test"]}")
+
     else:
         print("\nBrak informacji")
 
@@ -71,6 +84,60 @@ def add_visit(patients_cache):
     else:
         print("\nBrak takiego pacjenta")
 
+def add_prescription(patients_cache):
+    print("\n======== DODAWANIE RECEPTY ========")
+    pesel = input("Podaj pesel: ")
+
+    json_data = patients_cache.get(pesel)
+    
+    if json_data is not None:
+        data = json.loads(json_data)
+
+        date = input("\nPodaj datę [DD.MM.RRRR]: ")
+        doctor = input("Podaj lekarza: ")
+        medicines = input("Podaj leki: ")
+
+        prescription = {
+            "date": date,
+            "doctor": doctor,
+            "medicines": medicines
+        }
+
+        data["prescriptions"].append(prescription)
+
+        json_data = json.dumps(data)
+        patients_cache.put(pesel, json_data)
+
+    else:
+        print("\nBrak takiego pacjenta")
+
+def add_referral(patients_cache):
+    print("\n======== DODAWANIE SKIEROWANIA ========")
+    pesel = input("Podaj pesel: ")
+
+    json_data = patients_cache.get(pesel)
+    
+    if json_data is not None:
+        data = json.loads(json_data)
+
+        date = input("\nPodaj datę [DD.MM.RRRR]: ")
+        doctor = input("Podaj lekarza: ")
+        test = input("Podaj badanie: ")
+
+        referral = {
+            "date": date,
+            "doctor": doctor,
+            "test": test
+        }
+
+        data["referrals"].append(referral)
+
+        json_data = json.dumps(data)
+        patients_cache.put(pesel, json_data)
+
+    else:
+        print("\nBrak takiego pacjenta")
+
 def all_patients_info(patients_cache):
     print("\n======== INFO O WSZYSTKICH PACJENTACH ========")
     for key, value in patients_cache.scan():
@@ -79,11 +146,23 @@ def all_patients_info(patients_cache):
             print(f"\nPESEL: {key}")
             print(f"Imię: {data['name']}")
             print(f"Nazwisko: {data['surname']}")
+
             print("Wizyty:")
             for visit in data["visits"]:
                 print(f"- Data: {visit['timestamp']}, Lekarz: {visit['doctor']}")
+
+            print("Recepty:")
+            for prescription in data["prescriptions"]:
+                print(f"- Data: {prescription["date"]}, Lekarz: {prescription["doctor"]}, Leki {prescription["medicines"]}")
+
+            print("Skierowania:")
+            for referral in data["referrals"]:
+                print(f"- Data: {referral["date"]}, Lekarz: {referral["doctor"]}, Badanie: {referral["test"]}")
         else:
             print(f"\nPESEL: {key} – Brak informacji")
+
+
+# ==================== MAIN ====================
 
 def main():
     try:
@@ -105,7 +184,9 @@ def main():
         "visits": [
             {"timestamp": '12.04.2025 10:00', "doctor": 'Anna Nowak'},
             {"timestamp": '10.05.2025 9:00', "doctor": 'Anna Nowak'}
-        ]
+        ],
+        "prescriptions": [],
+        "referrals": []
     }
     
     json_data = json.dumps(data)
@@ -126,6 +207,12 @@ def main():
 
         elif choice == "dw":
             add_visit(patients_cache)
+
+        elif choice == "dr":
+            add_prescription(patients_cache)
+
+        elif choice == "ds":
+            add_referral(patients_cache)
 
         elif choice == "all":
             all_patients_info(patients_cache)

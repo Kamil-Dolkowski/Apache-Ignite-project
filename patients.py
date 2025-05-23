@@ -50,11 +50,11 @@ def patient_info(patients_cache):
 
         print("Wizyty:")
         for visit in data["visits"]:
-            print(f"- Data: {visit["timestamp"]}, Lekarz: {visit["doctor"]}")
+            print(f"- Data: {visit["timestamp"]}, Lekarz: {visit["doctor"]}, Opis: {visit["description"]}, Zalecenia: {visit["recommendations"]}")
         
         print("Recepty:")
         for prescription in data["prescriptions"]:
-            print(f"- Data: {prescription["date"]}, Lekarz: {prescription["doctor"]}, Leki {prescription["medicines"]}")
+            print(f"- Data: {prescription["date"]}, Lekarz: {prescription["doctor"]}, Leki: {prescription["medicines"]}")
 
         print("Skierowania:")
         for referral in data["referrals"]:
@@ -75,10 +75,15 @@ def add_visit(patients_cache):
         date = input("\nPodaj datę [DD.MM.RRRR]: ")
         time = input("Podaj godzinę [HH:MM]: ")
         doctor = input("Podaj lekarza: ")
+        description = input("Podaj opis: ")
+        recommendations = input("Podaj zalecenia: ")
 
         visit = {
             "timestamp": f"{date} {time}",
-            "doctor": doctor
+            "doctor": doctor,
+            "description": description,
+            "recommendations": recommendations
+
         }
 
         data["visits"].append(visit)
@@ -199,14 +204,18 @@ def main():
     # Dane przykładowe
 
     data = {
-        "name": 'Piotr',
-        "surname": 'Fulmański',
+        "name": 'Jan',
+        "surname": 'Kowalski',
         "visits": [
-            {"timestamp": '12.04.2025 10:00', "doctor": 'Anna Nowak'},
-            {"timestamp": '10.05.2025 9:00', "doctor": 'Anna Nowak'}
+            {"timestamp": '12.04.2025 10:00', "doctor": 'Anna Nowak', "description": 'Zdiagnozowano grypę u pacjenta' , "recommendations": 'Odpoczynek, nawodnienie; Paracetamol 500mg 1-2 tabletki co 6h, syrop przeciwkaszlowy'},
+            {"timestamp": '10.05.2025 9:00', "doctor": 'Krzysztof Lewandowski', "description": 'Kontrola okresowa', "recommendations": 'Więcej ruchu, aktywny wypoczynek'}
         ],
-        "prescriptions": [],
-        "referrals": []
+        "prescriptions": [
+            {"date": '12.04.2025 10:20', "doctor": 'Anna Nowak', "medicines": 'Paracetamol 500mg'}
+        ],
+        "referrals": [
+            {"date": '10.05.2025 9:15', "doctor": 'Krzysztof Lewandowski', "test": 'Badanie krwi'}
+        ]
     }
     
     json_data = json.dumps(data)

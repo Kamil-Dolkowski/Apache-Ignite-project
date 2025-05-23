@@ -8,13 +8,15 @@ def print_choices():
     print("ip - informacje o pacjencie")
     print("dw - dodaj wizytę")
     print("all - informacje o wszystkich pacjentach")
+    print("up - usuń pacjenta")
     print("q - zakończ program")
+    print("cl - usuń cache")
 
 def add_patient(patients_cache):
     print("\n======== DODAWANIE PACJENTA ========")
-    name = input("Imię: ")
-    surname = input("Nazwisko: ")
-    pesel = input("Pesel: ")
+    name = input("Imię: ").strip().capitalize()
+    surname = input("Nazwisko: ").strip().capitalize()
+    pesel = input("Pesel: ").strip()
 
     data = {
         "name": name,
@@ -22,7 +24,10 @@ def add_patient(patients_cache):
         "pesel": pesel,
         "visits": []
     }
-
+    if patients_cache.get(pesel):
+        print("\nPacjent o tym PESELu już istnieje.")
+        return
+    
     json_data = json.dumps(data)
     patients_cache.put(pesel, json_data)
 
@@ -85,6 +90,22 @@ def all_patients_info(patients_cache):
         else:
             print(f"\nPESEL: {key} – Brak informacji")
 
+def destroy_cache(patients_cache):
+    print("\n======== DESTRUKCJA CACHE ========")
+    patients_cache.destroy()
+    print("Cache zniszczony")
+
+def delete_patient(patients_cache):
+    print("\n======== USUWANIE PACJENTA ========")
+    pesel = input("Podaj pesel: ")
+
+    json_data = patients_cache.get(pesel)
+
+    if json_data is not None:
+        patients_cache.remove_key(pesel)
+        print("\nPacjent usunięty")
+    else:
+        print("\nBrak takiego pacjenta")
 def main():
     try:
         client = Client()
@@ -129,13 +150,21 @@ def main():
 
         elif choice == "all":
             all_patients_info(patients_cache)
-            
+        
+        elif choice == "up":
+            delete_patient(patients_cache)
+
         elif choice == "q":
             # patients_cache.destroy()
             break
 
+        elif choice == "cl":
+            destroy_cache(patients_cache)
+            break
         else:
             print("\nBłąd: Niepoprawne polecenie")
+
+    client.close()
     
 
 if __name__ == "__main__":

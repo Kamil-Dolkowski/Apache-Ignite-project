@@ -220,7 +220,10 @@ def main():
 
     data = {
         "name": 'Jan',
+        "name2": None,
         "surname": 'Kowalski',
+        "address": "Płock, ul. Słoneczna 2",
+        "phone": "123456789",
         "visits": [
             {"timestamp": '12.04.2025 10:00', "doctor": 'Anna Nowak', "description": 'Zdiagnozowano grypę u pacjenta' , "recommendations": 'Odpoczynek, nawodnienie; Paracetamol 500mg 1-2 tabletki co 6h, syrop przeciwkaszlowy'},
             {"timestamp": '10.05.2025 9:00', "doctor": 'Krzysztof Lewandowski', "description": 'Kontrola okresowa', "recommendations": 'Więcej ruchu, aktywny wypoczynek'}
